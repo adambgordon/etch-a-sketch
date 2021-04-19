@@ -25,10 +25,15 @@ html {
     display: grid;
     width: 500px;
     height: 500px;
+    background-color: grey;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
+    row-gap: 1px;
+    column-gap: 1px;
+    border: 1px solid black;
 }
 
-.canvas div {
-    border: 1px solid grey;
+.box {
+    /* border: 1px solid grey; */
+    background-color: white;
 }
