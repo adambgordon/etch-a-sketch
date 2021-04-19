@@ -1,10 +1,39 @@
 // Main code
 let gridSize;
 initGrid();
+initSlider();
 
-const slider = getSliderElement();
-slider.addEventListener("input",sliderMove);
-slider.addEventListener("change",resetGrid);
+
+
+
+// Adds the slider listeners
+function initSlider() {
+    const slider = getSliderElement();
+    slider.addEventListener("input",sliderMove);
+    slider.addEventListener("change",resetGrid);
+}
+
+function startShading(event) {
+    const boxes = document.querySelectorAll(".box");
+    boxes.forEach(box => box.addEventListener("mouseover",addShading));
+    this.classList.add("shading"); // Adds shading to first box clicked (otherwise only starts with next box)
+}
+
+function addShading(event) {
+    this.classList.add("shading");
+}
+
+function stopShading(event) {
+    const boxes = document.querySelectorAll(".box");
+    boxes.forEach(box => box.removeEventListener("mouseover",addShading));
+}
+
+function addBoxListeners() {
+    console.log("test");
+    const boxes = document.querySelectorAll(".box");
+    boxes.forEach(box => box.addEventListener("mouseup",stopShading));
+    boxes.forEach(box => box.addEventListener("mousedown",startShading));
+}
 
 // Gets slider element
 function getSliderElement() {
@@ -30,11 +59,12 @@ function getCanvasElement() {
 // Resets the grid when the slider is released on a value
 function resetGrid(event) {
     gridSize = this.value;
-    clearGrid();
+    deleteGrid();
     buildGrid();
 }
 
-function clearGrid () {
+// Deletes all box elements from the DOM
+function deleteGrid () {
     const canvas = getCanvasElement();
     while (canvas.firstChild) {
         canvas.removeChild(canvas.lastChild);
@@ -48,15 +78,13 @@ function initGrid() {
     buildGrid();
 }
 
-// Builds grid
+// Builds grid by adding box elements
 function buildGrid() {
     const canvas = getCanvasElement();
+
     let gap = parseInt(getComputedStyle(canvas).getPropertyValue("row-gap"),10);
-    let gridUnitDimension = Math.floor(500/gridSize) - gap;
-
+    let gridUnitDimension = Math.floor(512/gridSize) - gap;
     let canvasDimension = gridSize * (gridUnitDimension + gap) - 1;
-
-    console.log(canvasDimension);
 
     canvas.setAttribute("style",
     `grid-template-columns: repeat(${gridSize},${gridUnitDimension}px);
@@ -70,4 +98,6 @@ function buildGrid() {
         newBox.classList.add("box");
         canvas.appendChild(newBox);
     }
+
+    addBoxListeners();
 }
