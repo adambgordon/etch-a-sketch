@@ -29,10 +29,13 @@ function stopShading(event) {
 }
 
 function addBoxListeners() {
-    console.log("test");
     const boxes = document.querySelectorAll(".box");
     boxes.forEach(box => box.addEventListener("mouseup",stopShading));
     boxes.forEach(box => box.addEventListener("mousedown",startShading));
+}
+
+function clearAllShading() {
+
 }
 
 // Gets slider element
