@@ -10,10 +10,28 @@
         <div class="main-container">
             <div class="menu">
                 <p class="slider-output"></p>
-                <input type="range" min="1" max="64" value="32" class="slider">
-                <p class="color-selection">Color Selection</p>
-                <p class="grid-lines">Toggle Grid Lines</p>
-                <p class="clear">Clear</p>
+                <div>
+                    <input type="range" min="1" max="100" value="50" class="slider">
+                </div>
+                <div>
+                    <input type="color" value="#0000FF" class="color-picker">
+                </div>
+                <div>
+                    <button class="random-color-button">Random Color</button>
+                </div>
+                <div>
+                    <button class="rainbow-button">Rainbow Mode</button>
+                </div>
+                <div>
+                    <button class="color-scheme-button">Color Scheme Mode</button>
+                </div>
+                <div>
+                    <button class="eraser-button">Toggle Eraser</button>
+                </div>
+                <div>
+                    <button class="gridlines-button">Toggle Grid Lines</button>
+                </div>
+                <button class="clear-button">Clear</button>
             </div>
             <div class="canvas-wrapper">
                 <div class="canvas"></div>

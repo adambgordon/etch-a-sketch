@@ -3,7 +3,7 @@
 }
 
 html {
-    font-family:Arial, Helvetica, sans-serif
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .header {
@@ -20,8 +20,8 @@ html {
 
 .menu {
     border: 1px solid black;
-    margin: 0 1rem;
-    padding: 1rem;
+    margin: 0 3rem;
+    padding: 2rem;
     height: fit-content;
     width: fit-content;
     justify-self: right;
@@ -46,10 +46,32 @@ html {
     border: 1px solid var(--grid-color);
 }
 
+.canvas:hover {
+    cursor: crosshair;
+}
+
+.eraser-on {
+    color: red;
+}
+
+.rainbow-on {
+    color: red;
+}
+
+.color-scheme-on {
+    color: red;
+}
+
 .box {
     background-color: white;
 }
 
-.shading {
-    background-color: darkblue;
+input {
+    margin: 0.5rem;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    margin: 0.5rem;
 }
