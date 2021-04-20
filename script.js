@@ -1,11 +1,11 @@
-/* Main code */
+/* MAIN CODE */
 let gridSize;
 let shadeColor;
 let schemeColor;
 initMenu();
 initGrid();
 
-/* Functions */
+/* FUNCTIONS */
 
 // Initializes all menu items by adding listeners and setting initial values
 function initMenu () {
@@ -19,7 +19,8 @@ function initMenu () {
     initClearButton();
 }
 
-/* Menu init functions */
+/* MENU INIT FUNCTIONS */
+
 function initSlider() {
     const slider = getSliderElement();
     slider.addEventListener("input",sliderMove); // Updates string in real time
@@ -38,12 +39,12 @@ function initRandomColorButton() {
 }
 
 function initRainbowButton() {
-    const rainbowButton = document.querySelector(".rainbow-button");
+    const rainbowButton = getRainbowButton();
     rainbowButton.addEventListener("click",toggleRainbowMode);
 }
 
 function initColorSchemeButton() {
-    const colorSchemeButton = document.querySelector(".color-scheme-button");
+    const colorSchemeButton = getColorSchemeButton();
     colorSchemeButton.addEventListener("click",toggleColorSchemeMode);
     colorSchemeButton.addEventListener("mouseenter",toggleColorSchemeButtonHover)
     colorSchemeButton.addEventListener("mouseleave",toggleColorSchemeButtonHover)
@@ -51,7 +52,7 @@ function initColorSchemeButton() {
 }
 
 function initEraserButton () {
-    const eraserButton = document.querySelector(".eraser-button");
+    const eraserButton = getEraserButton();
     eraserButton.addEventListener("click",toggleEraserMode);
 }
 
@@ -65,66 +66,8 @@ function initGridlinesButton () {
     gridlinesButton.addEventListener("click",toggleGridlines);
 }
 
-/* Color manipulation functions */
-function setRandomColor() {
-    turnOffRainbow();
-    turnOffEraser();
-    shadeColor = randomHexColor();
-    schemeColor = shadeColor;
-    const colorPicker = document.querySelector(".color-picker");
-    colorPicker.value = shadeColor;
-    updateColorSchemeButtonStyle();
-}
+/* SLIDER MANIPULATION FUNCTIONS */
 
-function randomHexColor() {
-    let hexColor = "#";
-    for (let i = 0; i < 6; i++) {
-        hexColor += Math.floor(Math.random()*16).toString(16);
-    }
-    return hexColor;
-}
-
-// Generates a "rainbow" by randomly setting one rgb component to 255
-function randomRainbowColor() {
-    let r, g, b;
-    let rand = Math.random()*3;
-    if (rand < 1) {
-        r = 255;
-        g = Math.floor(Math.random()*256);
-        b = Math.floor(Math.random()*256);
-    } else if (rand < 2) {
-        r = Math.floor(Math.random()*256);
-        g = 255;
-        b = Math.floor(Math.random()*256);
-    } else if (rand < 3) {
-        r = Math.floor(Math.random()*256);
-        g = Math.floor(Math.random()*256);
-        b = 255;
-    }
-    return rgbToHex(r,g,b);
-}
-
-function updateShadeColor () {
-    shadeColor = this.value;
-    const colorPicker = document.querySelector(".color-picker");
-    colorPicker.value = shadeColor;
-    updateColorSchemeButtonStyle();
-    schemeColor = shadeColor;
-}
-
-function getCurrentColor() {
-    if (document.querySelector(".eraser-on") !== null) {
-        return "#FFFFFF";
-    } else if (document.querySelector(".color-scheme-on") !== null) {
-        return shiftColorRandom(schemeColor);
-    } else if (document.querySelector(".rainbow-on") !== null) {
-        return randomRainbowColor();
-    } else {
-        return shadeColor;
-    }
-}
-
-/* Slider manipulation functions */
 function getSliderElement() {
     return document.querySelector(".slider");
 }
@@ -138,7 +81,8 @@ function updateSliderOutput(sizeValue) {
     document.querySelector(".slider-output").textContent = output;
 }
 
-/* Box shading functions */
+/* BOX SHADING FUNCTIONS */
+
 function startShading() {
     const boxes = getBoxesList();
     boxes.forEach(box => box.addEventListener("mouseover",addShading));
@@ -150,8 +94,6 @@ function addShading() {
     let currentBoxColor = getCurrentColor();
     this.setAttribute("style",`background-color: ${currentBoxColor};`);
 }
-
-
 
 function stopShading() {
     const boxes = getBoxesList();
@@ -176,13 +118,33 @@ function getBoxesList() {
     return document.querySelectorAll(".box");
 }
 
+function updateShadeColor () {
+    shadeColor = this.value;
+    const colorPicker = document.querySelector(".color-picker");
+    colorPicker.value = shadeColor;
+    updateColorSchemeButtonStyle();
+    schemeColor = shadeColor;
+}
 
-// Returns canvas grid element
+// Returns appropriate hex color based on shading mode
+function getCurrentColor() {
+    if (document.querySelector(".eraser-on") !== null) {
+        return "#FFFFFF";
+    } else if (document.querySelector(".color-scheme-on") !== null) {
+        return shiftColorRandom(schemeColor);
+    } else if (document.querySelector(".rainbow-on") !== null) {
+        return randomRainbowColor();
+    } else {
+        return shadeColor;
+    }
+}
+
+/* CANVAS/GRID MANIPULATION FUNCTIONS */
+
 function getCanvasElement() {
     return document.querySelector(".canvas");
 }
 
-/* Grid manipulation functions */
 function resetGrid() {
     gridSize = this.value;
     deleteGrid();
@@ -197,7 +159,7 @@ function deleteGrid () {
     }
 }
 
-// Initializes grid to 32x32 with 1px gap for gridlines
+// Initializes grid to 50x50 with 1px gap for gridlines
 function initGrid() {
     gridSize = 50;
     const gap = 1;
@@ -241,32 +203,46 @@ function setGridDimensions(gap) {
     column-gap: ${gap}px;`);
 }
 
+
+/*  MODE FUNCTIONS */
+
+function getRainbowButton () {
+    return document.querySelector(".rainbow-button");
+}
+
+function getEraserButton () {
+    return document.querySelector(".eraser-button");
+}
+
+function getColorSchemeButton () {
+    return document.querySelector(".color-scheme-button");
+}
+
 function turnOffRainbow () {
-    const rainbowButton = document.querySelector(".rainbow-button");
+    const rainbowButton = getRainbowButton();
     if (rainbowButton.classList.contains("rainbow-on")) {
         rainbowButton.classList.remove("rainbow-on");
     }
 }
 
 function turnOffEraser () {
-    const eraserButton = document.querySelector(".eraser-button");
+    const eraserButton = getEraserButton();
     if (eraserButton.classList.contains("eraser-on")) {
         eraserButton.classList.remove("eraser-on");
     }
 }
 
 function turnOffColorScheme () {
-    const colorSchemeButton = document.querySelector(".color-scheme-button");
+    const colorSchemeButton = getColorSchemeButton();
     if(colorSchemeButton.classList.contains("color-scheme-on")) {
         colorSchemeButton.classList.remove("color-scheme-on");
     }
     updateColorSchemeButtonStyle();
 }
 
-/* Eraser functions */
 function toggleEraserMode() {
     const eraserOn = "eraser-on";
-    const eraserButton = document.querySelector(".eraser-button");
+    const eraserButton = getEraserButton();
     
     if (eraserButton.classList.contains(eraserOn)) {
         eraserButton.classList.remove(eraserOn);
@@ -279,7 +255,7 @@ function toggleEraserMode() {
 
 function toggleRainbowMode () {
     const rainbowOn = "rainbow-on";
-    const rainbowButton = document.querySelector(".rainbow-button");
+    const rainbowButton = getRainbowButton();
 
     if (rainbowButton.classList.contains(rainbowOn)) {
         rainbowButton.classList.remove(rainbowOn);
@@ -293,7 +269,7 @@ function toggleRainbowMode () {
 function toggleColorSchemeMode () {
     const colorSchemeOn = "color-scheme-on";
     const colorSchemeHover = "color-scheme-hover";
-    const colorSchemeButton = document.querySelector(".color-scheme-button");
+    const colorSchemeButton = getColorSchemeButton();
 
     if (colorSchemeButton.classList.contains(colorSchemeHover)) {
         colorSchemeButton.classList.remove(colorSchemeHover);
@@ -312,17 +288,19 @@ function toggleColorSchemeMode () {
 }
 
 function updateColorSchemeButtonStyle () {
-    const colorSchemeButton = document.querySelector(".color-scheme-button")
+    const colorSchemeButton = getColorSchemeButton()
 
     let fillColor, textColor;
 
     if (colorSchemeButton.classList.contains("color-scheme-on")) {
         textColor = textColorAgainstBackground(shadeColor);
+
         if (colorSchemeButton.classList.contains("color-scheme-hover")) {
             fillColor = lightenColor(shadeColor);
         } else {
             fillColor = shadeColor;
         }
+
     } else {
         fillColor = "";
         textColor = "#000000";
@@ -331,7 +309,7 @@ function updateColorSchemeButtonStyle () {
 }
 
 function toggleColorSchemeButtonHover (event) {
-    const colorSchemeButton = document.querySelector(".color-scheme-button")
+    const colorSchemeButton = getColorSchemeButton();
 
     if (colorSchemeButton.classList.contains("color-scheme-on")) {
         if(colorSchemeButton.classList.contains("color-scheme-hover")) {
@@ -343,6 +321,48 @@ function toggleColorSchemeButtonHover (event) {
     }
 }
 
+/* COLOR MANIPULATION FUNCTIONS */
+
+function setRandomColor() {
+    turnOffRainbow();
+    turnOffEraser();
+    shadeColor = randomHexColor();
+    schemeColor = shadeColor;
+    const colorPicker = document.querySelector(".color-picker");
+    colorPicker.value = shadeColor;
+    updateColorSchemeButtonStyle();
+}
+
+function randomHexColor() {
+    let hexColor = "#";
+    for (let i = 0; i < 6; i++) {
+        hexColor += Math.floor(Math.random()*16).toString(16);
+    }
+    return hexColor;
+}
+
+// Generates a "rainbow" by randomly setting one rgb component to 255
+function randomRainbowColor() {
+    let r, g, b;
+    let rand = Math.random()*3;
+    if (rand < 1) {
+        r = 255;
+        g = Math.floor(Math.random()*256);
+        b = Math.floor(Math.random()*256);
+    } else if (rand < 2) {
+        r = Math.floor(Math.random()*256);
+        g = 255;
+        b = Math.floor(Math.random()*256);
+    } else if (rand < 3) {
+        r = Math.floor(Math.random()*256);
+        g = Math.floor(Math.random()*256);
+        b = 255;
+    }
+    return rgbToHex(r,g,b);
+}
+
+
+// Returns black or white (intended for text) depending background color
 function textColorAgainstBackground(hexColor) {
     let r = hexToR(hexColor);
     let g = hexToG(hexColor);
@@ -354,6 +374,7 @@ function textColorAgainstBackground(hexColor) {
     return (rgbAverage > 160 || rgbMax > 230) ? "#000000" : "#FFFFFF";
 }
 
+// Lightens color by increasing RGB elements by 40 each
 function lightenColor (hexColor) {
     let r = hexToR(hexColor);
     let g = hexToG(hexColor);
@@ -369,7 +390,6 @@ function lightenColor (hexColor) {
     
     return hexColor;
 }
-
 
 function shiftColorRandom (hexColor) {
     let r = hexToR(hexColor);
@@ -397,7 +417,7 @@ function randomSign() {
     return Math.random() < 0.5 ? -1 : 1;
 }
 
-
+// Caps input to range of 0-255
 function constrain (num) {
     return Math.max(0,Math.min(num,255));
 }
