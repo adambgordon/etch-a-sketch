@@ -8,16 +8,17 @@
     <body>
         <div class="header">Etch-A-Sketch</div>
         <div class="main-container">
+            
             <div class="menu">
-                <p class="slider-output"></p>
+                <div class="top-row">
+                    <input type="color" defaultValue="#000000" class="color-picker">
+                    <span class="slider-output"></span>
+                </div>
                 <div>
                     <input type="range" min="1" max="100" value="50" class="slider">
                 </div>
                 <div>
-                    <input type="color" value="#0000FF" class="color-picker">
-                </div>
-                <div>
-                    <button class="random-color-button">Random Color</button>
+                    <button class="random-color-button">Randomize Color</button>
                 </div>
                 <div>
                     <button class="rainbow-button">Rainbow Mode</button>
@@ -26,16 +27,20 @@
                     <button class="color-scheme-button">Color Scheme Mode</button>
                 </div>
                 <div>
-                    <button class="eraser-button">Toggle Eraser</button>
-                </div>
-                <div>
                     <button class="gridlines-button">Toggle Grid Lines</button>
                 </div>
-                <button class="clear-button">Clear</button>
+                <div>
+                    <button class="eraser-button">Eraser</button>
+                </div>
+                <div>
+                    <button class="clear-button">Clear</button>
+                </div>
             </div>
+
             <div class="canvas-wrapper">
                 <div class="canvas"></div>
             </div>
+
         </div>
     </body>
 </html>

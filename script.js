@@ -46,11 +46,14 @@ function initRainbowButton() {
 function initColorSchemeButton() {
     const colorSchemeButton = document.querySelector(".color-scheme-button");
     colorSchemeButton.addEventListener("click",toggleColorSchemeMode);
+    colorSchemeButton.addEventListener("mouseenter",toggleColorSchemeButtonHover)
+    colorSchemeButton.addEventListener("mouseleave",toggleColorSchemeButtonHover)
+
 }
 
 function initEraserButton () {
     const eraserButton = document.querySelector(".eraser-button");
-    eraserButton.addEventListener("click",toggleEraser);
+    eraserButton.addEventListener("click",toggleEraserMode);
 }
 
 function initClearButton () {
@@ -65,10 +68,13 @@ function initGridlinesButton () {
 
 /* Color manipulation functions */
 function setRandomColor() {
-    const colorPicker = document.querySelector(".color-picker");
+    turnOffRainbow();
+    turnOffEraser();
     shadeColor = randomHexColor();
-    colorPicker.setAttribute("value",shadeColor);
     schemeColor = shadeColor;
+    const colorPicker = document.querySelector(".color-picker");
+    colorPicker.value = shadeColor;
+    updateColorSchemeButtonStyle();
 }
 
 function randomHexColor() {
@@ -79,8 +85,30 @@ function randomHexColor() {
     return hexColor;
 }
 
+function randomRainbowColor() {
+    let r, g, b;
+    let rand = Math.random()*3;
+    if (rand < 1) {
+        r = 255;
+        g = Math.floor(Math.random()*256);
+        b = Math.floor(Math.random()*256);
+    } else if (rand < 2) {
+        r = Math.floor(Math.random()*256);
+        g = 255;
+        b = Math.floor(Math.random()*256);
+    } else if (rand < 3) {
+        r = Math.floor(Math.random()*256);
+        g = Math.floor(Math.random()*256);
+        b = 255;
+    }
+    return rgbToHex(r,g,b);
+}
+
 function updateShadeColor () {
     shadeColor = this.value;
+    const colorPicker = document.querySelector(".color-picker");
+    colorPicker.value = shadeColor;
+    updateColorSchemeButtonStyle();
     schemeColor = shadeColor;
 }
 
@@ -115,9 +143,9 @@ function getCurrentColor() {
     if (document.querySelector(".eraser-on") !== null) {
         return "#FFFFFF";
     } else if (document.querySelector(".color-scheme-on") !== null) {
-        return shiftColor(schemeColor);
+        return shiftColorRandom(schemeColor);
     } else if (document.querySelector(".rainbow-on") !== null) {
-        return randomHexColor();
+        return randomRainbowColor();
     } else {
         return shadeColor;
     }
@@ -135,6 +163,9 @@ function addBoxListeners() {
 }
 
 function clearAllShading() {
+    turnOffRainbow();
+    turnOffColorScheme();
+    turnOffEraser();
     const boxes = getBoxesList();
     boxes.forEach(box => box.setAttribute("style","background-color: white;"));
 }
@@ -142,7 +173,6 @@ function clearAllShading() {
 function getBoxesList() {
     return document.querySelectorAll(".box");
 }
-
 
 
 // Returns canvas grid element
@@ -209,54 +239,137 @@ function setGridDimensions(gap) {
     column-gap: ${gap}px;`);
 }
 
-/* Eraser functions */
-function toggleEraser() {
-    const eraserOn = "eraser-on";
+function turnOffRainbow () {
+    const rainbowButton = document.querySelector(".rainbow-button");
+    if (rainbowButton.classList.contains("rainbow-on")) {
+        rainbowButton.classList.remove("rainbow-on");
+    }
+}
 
+function turnOffEraser () {
+    const eraserButton = document.querySelector(".eraser-button");
+    if (eraserButton.classList.contains("eraser-on")) {
+        eraserButton.classList.remove("eraser-on");
+    }
+}
+
+function turnOffColorScheme () {
+    const colorSchemeButton = document.querySelector(".color-scheme-button");
+    if(colorSchemeButton.classList.contains("color-scheme-on")) {
+        colorSchemeButton.classList.remove("color-scheme-on");
+    }
+    updateColorSchemeButtonStyle();
+}
+
+/* Eraser functions */
+function toggleEraserMode() {
+    const eraserOn = "eraser-on";
     const eraserButton = document.querySelector(".eraser-button");
     
     if (eraserButton.classList.contains(eraserOn)) {
         eraserButton.classList.remove(eraserOn);
     } else {
+        turnOffRainbow();
+        turnOffColorScheme();
         eraserButton.classList.add(eraserOn);
     }
 }
 
 function toggleRainbowMode () {
     const rainbowOn = "rainbow-on";
-    const colorSchemeOn = "color-scheme-on";
-
     const rainbowButton = document.querySelector(".rainbow-button");
-    const colorSchemeButton = document.querySelector(".color-scheme-button");
 
     if (rainbowButton.classList.contains(rainbowOn)) {
         rainbowButton.classList.remove(rainbowOn);
     } else {
-        if(colorSchemeButton.classList.contains(colorSchemeOn)) {
-            colorSchemeButton.classList.remove(colorSchemeOn);
-        }
+        turnOffColorScheme();
+        turnOffEraser();
         rainbowButton.classList.add(rainbowOn);
     }
 }
 
 function toggleColorSchemeMode () {
-    const rainbowOn = "rainbow-on";
     const colorSchemeOn = "color-scheme-on";
-
-    const rainbowButton = document.querySelector(".rainbow-button");
+    const colorSchemeHover = "color-scheme-hover";
     const colorSchemeButton = document.querySelector(".color-scheme-button");
 
-    if (colorSchemeButton.classList.contains(colorSchemeOn)) {
-        colorSchemeButton.classList.remove(colorSchemeOn);
+    if (colorSchemeButton.classList.contains(colorSchemeHover)) {
+        colorSchemeButton.classList.remove(colorSchemeHover);
     } else {
-        if(rainbowButton.classList.contains(rainbowOn)) {
-            rainbowButton.classList.remove(rainbowOn);
-        }
+        colorSchemeButton.classList.add(colorSchemeHover);
+    }
+
+    if (colorSchemeButton.classList.contains(colorSchemeOn)) {
+        turnOffColorScheme();
+    } else {
+        turnOffRainbow();
+        turnOffEraser();
         colorSchemeButton.classList.add(colorSchemeOn);
+    }
+    updateColorSchemeButtonStyle();
+}
+
+function updateColorSchemeButtonStyle () {
+    const colorSchemeButton = document.querySelector(".color-scheme-button")
+
+    let fillColor, textColor;
+
+    if (colorSchemeButton.classList.contains("color-scheme-on")) {
+        textColor = textColorAgainstBackground(shadeColor);
+        if (colorSchemeButton.classList.contains("color-scheme-hover")) {
+            fillColor = lightenColor(shadeColor);
+        } else {
+            fillColor = shadeColor;
+        }
+    } else {
+        fillColor = "";
+        textColor = "#000000";
+    }
+    colorSchemeButton.setAttribute("style",`background-color:${fillColor}; color:${textColor};`);
+}
+
+function toggleColorSchemeButtonHover (event) {
+    const colorSchemeButton = document.querySelector(".color-scheme-button")
+
+    if (colorSchemeButton.classList.contains("color-scheme-on")) {
+        if(colorSchemeButton.classList.contains("color-scheme-hover")) {
+            colorSchemeButton.classList.remove("color-scheme-hover");
+        } else {
+            colorSchemeButton.classList.add("color-scheme-hover");
+        }
+        updateColorSchemeButtonStyle();
     }
 }
 
-function shiftColor (hexColor) {
+function textColorAgainstBackground(hexColor) {
+    let r = hexToR(hexColor);
+    let g = hexToG(hexColor);
+    let b = hexToB(hexColor);
+
+    let rgbAverage = (r+g+b)/3;
+    let rgbMax = Math.max(r,g,b);
+
+    return (rgbAverage > 160 || rgbMax > 230) ? "#000000" : "#FFFFFF";
+}
+
+function lightenColor (hexColor) {
+    let r = hexToR(hexColor);
+    let g = hexToG(hexColor);
+    let b = hexToB(hexColor);
+
+    const lighten = 40;
+
+    r = constrain(r + lighten);
+    g = constrain(g + lighten);
+    b = constrain(b + lighten);
+
+    hexColor = rgbToHex(r,g,b);
+    
+    return hexColor;
+}
+
+
+function shiftColorRandom (hexColor) {
     let r = hexToR(hexColor);
     let g = hexToG(hexColor);
     let b = hexToB(hexColor);
