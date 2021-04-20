@@ -1,5 +1,4 @@
 /* Main code */
-
 let gridSize;
 let shadeColor;
 let schemeColor;
@@ -85,6 +84,7 @@ function randomHexColor() {
     return hexColor;
 }
 
+// Generates a "rainbow" by randomly setting one rgb component to 255
 function randomRainbowColor() {
     let r, g, b;
     let rand = Math.random()*3;
@@ -110,6 +110,18 @@ function updateShadeColor () {
     colorPicker.value = shadeColor;
     updateColorSchemeButtonStyle();
     schemeColor = shadeColor;
+}
+
+function getCurrentColor() {
+    if (document.querySelector(".eraser-on") !== null) {
+        return "#FFFFFF";
+    } else if (document.querySelector(".color-scheme-on") !== null) {
+        return shiftColorRandom(schemeColor);
+    } else if (document.querySelector(".rainbow-on") !== null) {
+        return randomRainbowColor();
+    } else {
+        return shadeColor;
+    }
 }
 
 /* Slider manipulation functions */
@@ -139,17 +151,7 @@ function addShading() {
     this.setAttribute("style",`background-color: ${currentBoxColor};`);
 }
 
-function getCurrentColor() {
-    if (document.querySelector(".eraser-on") !== null) {
-        return "#FFFFFF";
-    } else if (document.querySelector(".color-scheme-on") !== null) {
-        return shiftColorRandom(schemeColor);
-    } else if (document.querySelector(".rainbow-on") !== null) {
-        return randomRainbowColor();
-    } else {
-        return shadeColor;
-    }
-}
+
 
 function stopShading() {
     const boxes = getBoxesList();

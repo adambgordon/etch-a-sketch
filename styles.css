@@ -2,7 +2,7 @@
 
 :root {
     --grid-color: rgb(220,220,220);
-    --menu-spacing: 0.75rem 0;
+    --menu-spacing: 0.7rem 0;
 }
 
 html {
@@ -22,36 +22,68 @@ html {
 }
 
 .menu {
-    border: 1px solid var(--grid-color);
-    margin: 0 3rem;
-    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    /* border: 1px solid var(--grid-color); */
+    margin: 0 5rem;
+    padding: 0;
     height: fit-content;
     width: fit-content;
     justify-self: right;
-}
-
-.top-row {
-    display: flex;
-    padding: 0.5rem;
-    justify-content: space-between;
+    align-items: center;
 }
 
 .color-picker {
-    margin: var(--menu-spacing);
-    align-self: center;
+    margin: 0 0 2.5rem;
+}
+
+input[type="color"] {
+	-webkit-appearance: none;
+    background-color: transparent;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: none;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 4px;
+    border: 1px solid var(--grid-color);
+    border-radius: 50%;
+    box-shadow: 0 0 5px 2px var(--grid-color);
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+
 }
 
 .slider-output {
+    font-size: 0.6rem;
     font-weight: 600;
-    margin: var(--menu-spacing);
-    align-self: center;
+    margin: 0;  
 }
 
 .slider {
+    appearance: none;
     width: 10rem;
-    margin: var(--menu-spacing);
+    height: 4px;
+    margin: 0 0 2rem;  
+    background: var(--grid-color);
+    border-radius: 2px;
 }
 
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    background: rgb(61, 161, 255);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+.slider::-webkit-slider-thumb:hover {
+    background:rgb(116, 188, 255)
+}
 .eraser-on {
     color: white !important;
     background-color: red;
@@ -118,6 +150,7 @@ button:active {
     row-gap: 1px;
     column-gap: 1px;
     border: 1px solid var(--grid-color);
+    box-shadow: 0 0 10px 1px var(--grid-color);
 }
 
 .canvas:hover {
