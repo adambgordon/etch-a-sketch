@@ -99,13 +99,22 @@ input[type="color"]::-webkit-color-swatch {
         repeating-linear-gradient(
             45deg, rgb(0, 255, 157),
             rgb(255, 145, 250) 50%,
-            rgb(255, 200, 88) 100%,
-            rgb(255, 0, 0));
+            rgb(255, 200, 88) 100%);
 }
 
-.rainbow-on:hover {
+.rainbow-on:hover, .rainbow-trail-on:hover {
     background-color: rgba(255, 255, 255, 0.5);
     background-blend-mode: soft-light;
+}
+
+.rainbow-trail-on {
+    color: white !important;
+    background:
+        repeating-linear-gradient(
+            45deg, rgb(255, 208, 113),
+            rgb(250, 72, 72) 33%,
+            rgb(113, 170, 255) 67%,
+            rgb(193, 255, 135) 100%);
 }
 
 .box {

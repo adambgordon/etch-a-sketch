@@ -2,6 +2,7 @@
 let gridSize;
 let shadeColor;
 let schemeColor;
+let rainbowTrailColor;
 initMenu();
 initGrid();
 
@@ -13,6 +14,7 @@ function initMenu () {
     initColorPicker();
     initRandomColorButton();
     initRainbowButton();
+    initRainbowTrailButton();
     initColorSchemeButton();
     initEraserButton();
     initGridlinesButton();
@@ -41,6 +43,11 @@ function initRandomColorButton() {
 function initRainbowButton() {
     const rainbowButton = getRainbowButton();
     rainbowButton.addEventListener("click",toggleRainbowMode);
+}
+
+function initRainbowTrailButton() {
+    const rainbowTrailButton = getRainbowTrailButton ();
+    rainbowTrailButton.addEventListener("click",toggleRainbowTrailMode);
 }
 
 function initColorSchemeButton() {
@@ -110,6 +117,7 @@ function clearAllShading() {
     turnOffRainbow();
     turnOffColorScheme();
     turnOffEraser();
+    turnOffRainbowTrail();
     const boxes = getBoxesList();
     boxes.forEach(box => box.setAttribute("style","background-color: white;"));
 }
@@ -134,6 +142,8 @@ function getCurrentColor() {
         return shiftColorRandom(schemeColor);
     } else if (document.querySelector(".rainbow-on") !== null) {
         return randomRainbowColor();
+    } else if (document.querySelector(".rainbow-trail-on") !== null){
+        return rainbowTrailColor = shiftColorRandom(rainbowTrailColor);
     } else {
         return shadeColor;
     }
@@ -210,6 +220,10 @@ function getRainbowButton () {
     return document.querySelector(".rainbow-button");
 }
 
+function getRainbowTrailButton () {
+    return document.querySelector(".rainbow-trail-button");
+}
+
 function getEraserButton () {
     return document.querySelector(".eraser-button");
 }
@@ -222,6 +236,13 @@ function turnOffRainbow () {
     const rainbowButton = getRainbowButton();
     if (rainbowButton.classList.contains("rainbow-on")) {
         rainbowButton.classList.remove("rainbow-on");
+    }
+}
+
+function turnOffRainbowTrail () {
+    const rainbowTrailButton = getRainbowTrailButton();
+    if (rainbowTrailButton.classList.contains("rainbow-trail-on")) {
+        rainbowTrailButton.classList.remove("rainbow-trail-on");
     }
 }
 
@@ -249,6 +270,7 @@ function toggleEraserMode() {
     } else {
         turnOffRainbow();
         turnOffColorScheme();
+        turnOffRainbowTrail();
         eraserButton.classList.add(eraserOn);
     }
 }
@@ -262,7 +284,22 @@ function toggleRainbowMode () {
     } else {
         turnOffColorScheme();
         turnOffEraser();
+        turnOffRainbowTrail();
         rainbowButton.classList.add(rainbowOn);
+    }
+}
+
+function toggleRainbowTrailMode () {
+    const rainbowTrailOn = "rainbow-trail-on";
+    const rainbowTrailButton = getRainbowTrailButton();
+    if (rainbowTrailButton.classList.contains(rainbowTrailOn)) {
+        rainbowTrailButton.classList.remove(rainbowTrailOn);
+    } else {
+        turnOffColorScheme();
+        turnOffEraser();
+        turnOffRainbow();
+        rainbowTrailButton.classList.add(rainbowTrailOn);
+        rainbowTrailColor = shiftColorRandom(shadeColor);
     }
 }
 
@@ -282,6 +319,7 @@ function toggleColorSchemeMode () {
     } else {
         turnOffRainbow();
         turnOffEraser();
+        turnOffRainbowTrail();
         colorSchemeButton.classList.add(colorSchemeOn);
     }
     updateColorSchemeButtonStyle();
@@ -326,6 +364,7 @@ function toggleColorSchemeButtonHover (event) {
 function setRandomColor() {
     turnOffRainbow();
     turnOffEraser();
+    turnOffRainbowTrail();
     shadeColor = randomHexColor();
     schemeColor = shadeColor;
     const colorPicker = document.querySelector(".color-picker");
