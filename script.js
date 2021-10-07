@@ -158,7 +158,7 @@ function getCanvasElement() {
 function resetGrid() {
     gridSize = this.value;
     deleteGrid();
-    buildGrid(getGapValue());
+    buildGrid();
 }
 
 // Deletes all box elements from the DOM
@@ -174,7 +174,8 @@ function initGrid() {
     gridSize = 50;
     const gap = 1;
     updateSliderOutput(gridSize);
-    buildGrid(gap);
+    setGridDimensions(gap);
+    buildGrid();
 }
 
 // Builds grid by creating and appending box elements
